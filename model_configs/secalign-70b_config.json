@@ -1,0 +1,17 @@
+{
+    "model_info": {
+        "provider": "meta",
+        "name": "meta-secalign/Meta-SecAlign-70B",
+        "another_name": "meta-secalign/Meta-SecAlign-70B"
+    },
+    "api_key_info": {
+        "api_keys": [
+            ""
+        ],
+        "api_key_use": 0
+    },
+    "params": {
+        "temperature": 0.001,
+        "max_output_tokens": 100
+    }
+}

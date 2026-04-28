@@ -1,0 +1,17 @@
+{
+    "model_info": {
+        "provider": "qwen2",
+        "name": "Qwen/Qwen2.5-7B-Instruct",
+        "another_name": "Qwen/Qwen2.5-7B-Instruct"
+    },
+    "api_key_info": {
+        "api_keys": [
+            ""
+        ],
+        "api_key_use": 0
+    },
+    "params": {
+        "temperature": 0.001,
+        "max_output_tokens": 100
+    }
+}

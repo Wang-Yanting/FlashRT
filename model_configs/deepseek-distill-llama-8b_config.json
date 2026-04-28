@@ -1,0 +1,17 @@
+{
+    "model_info": {
+        "provider": "deepseek",
+        "name": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+        "another_name": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+    },
+    "api_key_info": {
+        "api_keys": [
+            ""
+        ],
+        "api_key_use": 0
+    },
+    "params": {
+        "temperature": 0.001,
+        "max_output_tokens": 100
+    }
+}

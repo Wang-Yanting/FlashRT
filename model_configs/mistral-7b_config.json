@@ -1,0 +1,17 @@
+{
+    "model_info": {
+        "provider": "mistral",
+        "name": "mistralai/Mistral-7B-Instruct-v0.3",
+        "another_name": "mistralai/Mistral-7B-Instruct-v0.3"
+    },
+    "api_key_info": {
+        "api_keys": [
+            ""
+        ],
+        "api_key_use": 0
+    },
+    "params": {
+        "temperature": 0.001,
+        "max_output_tokens": 100
+    }
+}
