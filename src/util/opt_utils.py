@@ -195,14 +195,20 @@ def get_logprob_cache(kv_cache,model,context_left,context_right,payload,query, n
     
     return total_log_prob, first_token_log_prob
 
-def get_important_tokens(model,context_left,context_right,payload,query, new_adv, target_answer, context_right_recompute_ratio=1.0, segment_size = 50):
+def get_important_tokens(model,context_left,context_right,payload,query, new_adv, target_answer, context_right_recompute_ratio=1.0, segment_size = 50, override_payload_ids=None):
     suffix_manager = SuffixManager(model,context_left,context_right,query, new_adv, payload, target_answer, 0)
+    if override_payload_ids is not None:
+        from src.util.kv_cache_utils import _override_suffix_manager_payload_ids
+        _override_suffix_manager_payload_ids(suffix_manager, override_payload_ids)
     important_positions, importance_values,_, _ = AvgAttentionAttribution(model, ratio=context_right_recompute_ratio).attribute_segment(suffix_manager.prompt_ids,suffix_manager.target_ids,suffix_manager.malicious_instruction_slice,segment_size = segment_size)
     return important_positions, importance_values
 
-def get_logprob_cache_attention(kv_cache,model,context_left,context_right,payload,query, new_adv, target_answer, important_tokens):
+def get_logprob_cache_attention(kv_cache,model,context_left,context_right,payload,query, new_adv, target_answer, important_tokens, override_payload_ids=None):
 
     suffix_manager = SuffixManager(model,context_left,context_right,query, new_adv, payload, target_answer, 0)
+    if override_payload_ids is not None:
+        from src.util.kv_cache_utils import _override_suffix_manager_payload_ids
+        _override_suffix_manager_payload_ids(suffix_manager, override_payload_ids)
     total_len = len(suffix_manager.get_prompt_with_target_ids()) 
     
     malicious_instruction_ids = suffix_manager.get_prompt_with_target_ids()[suffix_manager.malicious_instruction_slice]

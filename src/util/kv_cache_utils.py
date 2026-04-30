@@ -4,16 +4,34 @@ from src.util.utils import *
 from transformers.cache_utils import StaticCache
 from transformers import StaticCache
 import torch
-def initialize_kv_cache(model,context_left,context_right,payload,query, adv, target_answer):
+def initialize_kv_cache(model,context_left,context_right,payload,query, adv, target_answer, override_payload_ids=None):
 
     kv_caches = []  # list to store kv_cache for each prompt
     suffix_manager = SuffixManager(model,context_left,context_right,query, adv, payload, target_answer)
+    if override_payload_ids is not None:
+        _override_suffix_manager_payload_ids(suffix_manager, override_payload_ids)
     input_ids = torch.tensor([suffix_manager.get_prompt_with_target_ids()]).to(model.model.device)
     with torch.no_grad():
         outputs = model.model(input_ids, use_cache=True)
 
     kv_caches = outputs.past_key_values  # extract kv_cache from the output
     return kv_caches,suffix_manager
+
+
+def _override_suffix_manager_payload_ids(suffix_manager, override_payload_ids):
+    suffix_manager.payload_ids = list(override_payload_ids)
+    suffix_manager.prompt_ids = (
+        suffix_manager.before_prefix_ids
+        + suffix_manager.prefix_ids
+        + suffix_manager.payload_ids
+        + suffix_manager.suffix_ids
+        + suffix_manager.context_ids_right
+        + suffix_manager.after_context_ids
+    )
+    suffix_manager.prompt_with_target_ids = suffix_manager.prompt_ids + suffix_manager.target_ids
+    suffix_manager.init_prefix_suffix_slice()
+    suffix_manager.init_other_slices()
+    suffix_manager.init_context_right_recompute_slice()
 def slice_kv_cache(cache, k1,k2):
     # Create a new cache with the first k token positions
     new_cache = []
